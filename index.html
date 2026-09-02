@@ -1,197 +1,155 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YUTT 小家</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            overflow: hidden;
-            font-family: system-ui, -apple-system, sans-serif;
-            background-color: #f8f2e4;
-        }
-        .container {
-            width: 100vw;
-            height: 100vh;
-            position: relative;
-            perspective: 1200px;
-        }
-        /* 屋入面背景 */
-        .inside-room {
-            width: 100%;
-            height: 100%;
-            background: url("mon_gate_western_open_half.png") no-repeat center;
-            background-size: contain;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-        }
-        /* 門外框 */
-        .door-wrap {
-            position: absolute;
-            width: 420px;
-            height: 480px;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 2;
-            perspective: 1000px;
-        }
-        .door {
-            width: 100%;
-            height: 100%;
-            background-image: url("mon_gate_western_close.png");
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            transform-origin: left center;
-            transition: transform 1.6s cubic-bezier(0.23, 1, 0.32, 1);
-            cursor: pointer;
-        }
-        .door.open {
-            transform: rotateY(-82deg);
-        }
-        /* YUTT 門牌 */
-        .name-plate {
-            position: absolute;
-            top: 72%;
-            left: 52%;
-            transform: translate(-50%, 0);
-            background-color: #e6c278;
-            padding: 6px 14px;
-            border-radius: 6px;
-            font-size: 20px;
-            font-weight: bold;
-            color: #4a3818;
-            z-index: 3;
-            pointer-events: none;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>YUTT 小家</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body {
+        overflow: hidden;
+        font-family: system-ui, -apple-system, sans-serif;
+        background-color: #f8f2e4;
+    }
+    .container {
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
-        /* 可點擊嘅郵箱 */
-        .mailbox {
-            position: absolute;
-            bottom: 14vh;
-            left: calc(50% - 260px);
-            z-index: 3;
-            cursor: pointer;
-        }
-        .mail-post {
-            width: 12px;
-            height: 70px;
-            background: #795548;
-            margin: 0 auto;
-            border-radius: 3px;
-        }
-        .mail-box-body {
-            width: 54px;
-            height: 32px;
-            background-color: #c0392b;
-            border-radius: 6px 6px 2px 2px;
-            position: relative;
-        }
-        .mail-lid {
-            width: 54px;
-            height: 14px;
-            background-color: #a93226;
-            border-radius: 6px 6px 0 0;
-            position: absolute;
-            top: -12px;
-            left: 0;
-            transform-origin: left top;
-            transition: transform 0.6s ease;
-        }
-        .mail-lid.open-lid {
-            transform: rotateZ(-70deg);
-        }
-        .mail-slot {
-            width: 36px;
-            height: 4px;
-            background: #222;
-            position: absolute;
-            top: 10px;
-            left: 9px;
-            border-radius: 2px;
-        }
+    /* 大门区域 */
+    .door-wrapper {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -55%);
+        width: min(420px, 75vw);
+        cursor: pointer;
+    }
+    .door-img {
+        width: 100%;
+        display: block;
+    }
 
-        /* 正常卡通樹（三層樹冠，唔係單一圓圈） */
-        .tree {
-            position: absolute;
-            bottom: 12vh;
-            right: calc(50% - 280px);
-            z-index: 3;
-            pointer-events: none;
-        }
-        .tree-trunk {
-            width: 22px;
-            height: 85px;
-            background-color: #8b5a2b;
-            margin: 0 auto;
-            border-radius: 4px;
-        }
-        .leaf-1 {
-            width: 86px;
-            height: 86px;
-            background-color: #67b944;
-            border-radius: 50%;
-            margin: 0 auto -32px auto;
-        }
-        .leaf-2 {
-            width: 72px;
-            height: 72px;
-            background-color: #73c74e;
-            border-radius: 50%;
-            margin: 0 auto -26px auto;
-        }
-        .leaf-3 {
-            width: 58px;
-            height: 58px;
-            background-color: #82d25c;
-            border-radius: 50%;
-            margin: 0 auto -18px auto;
-        }
+    /* 邮箱 */
+    .mailbox-wrapper {
+        position: absolute;
+        bottom: 12vh;
+        left: calc(50% - 240px);
+        width: min(130px, 22vw);
+        cursor: pointer;
+    }
+    .mailbox-img {
+        width: 100%;
+        display: block;
+    }
 
-        /* 郵箱彈窗 */
-        .mail-modal {
-            position: fixed;
-            width: 320px;
-            padding: 24px;
-            background: #fffef0;
-            border: 4px solid #b88c58;
-            border-radius: 12px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%,-50%);
-            z-index: 100;
-            display: none;
-        }
-        .mail-modal h4 {
-            margin-bottom:12px;
-            color:#5a4220;
-        }
-        .mail-modal p {
-            color:#666;
-            margin-bottom:16px;
-        }
-        .close-mail {
-            padding: 6px 12px;
-            background:#d4b47c;
-            border:none;
-            border-radius:4px;
-            cursor:pointer;
-        }
-        .overlay {
-            position:fixed;
-            width:100vw;
-            height:100vh;
-            background:rgba(0,0,0,0.4);
-            z-index:99;
-            display:none;
-        }
-    </style>
+    /* 弹窗遮罩 */
+    .overlay {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0,0,0,0.35);
+        z-index: 99;
+        display: none;
+    }
+    .mail-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #fffef0;
+        border: 4px solid #b88c58;
+        border-radius: 14px;
+        padding: 28px;
+        width: min(320px, 85vw);
+        z-index: 100;
+        display: none;
+    }
+    .mail-modal h4 {
+        font-size: 22px;
+        color: #5a4220;
+        margin-bottom:12px;
+    }
+    .mail-modal p {
+        color:#666;
+        line-height:1.7;
+        margin-bottom:20px;
+    }
+    .close-btn {
+        padding:7px 16px;
+        background-color:#d4b47c;
+        border:none;
+        border-radius:6px;
+        font-size:16px;
+        color:#4a3818;
+        cursor:pointer;
+    }
+</style>
 </head>
+<body>
+<div class="container">
+    <!-- 大门 -->
+    <div class="door-wrapper" id="doorWrap">
+        <img class="door-img" id="doorImg" src="door_close.jpeg.png" alt="大门">
+    </div>
+
+    <!-- 邮箱 -->
+    <div class="mailbox-wrapper" id="mailWrap">
+        <img class="mailbox-img" id="mailImg" src="mailbox_close.jpeg.png" alt="邮箱">
+    </div>
+
+    <!-- 信件弹窗 -->
+    <div class="overlay" id="overlay"></div>
+    <div class="mail-modal" id="mailModal">
+        <h4>📮 邮箱来信</h4>
+        <p>欢迎来到 YUTT 小家✨<br>这里存放着一些温柔的小秘密。</p>
+        <button class="close-btn" id="closeModal">关闭</button>
+    </div>
+</div>
+
+<script>
+    // 大门开关逻辑
+    const doorImg = document.getElementById("doorImg");
+    let doorIsOpen = false;
+    document.getElementById("doorWrap").addEventListener("click", ()=>{
+        if(!doorIsOpen){
+            doorImg.src = "door_open.jpeg.png";
+            doorIsOpen = true;
+        }else{
+            doorImg.src = "door_close.jpeg.png";
+            doorIsOpen = false;
+        }
+    });
+
+    // 邮箱逻辑
+    const mailImg = document.getElementById("mailImg");
+    const overlay = document.getElementById("overlay");
+    const mailModal = document.getElementById("mailModal");
+    const closeModalBtn = document.getElementById("closeModal");
+    let mailOpened = false;
+
+    document.getElementById("mailWrap").addEventListener("click", ()=>{
+        mailImg.src = "mailbox_open.jpeg.png";
+        mailOpened = true;
+        overlay.style.display = "block";
+        mailModal.style.display = "block";
+    });
+
+    function closeMailBox(){
+        mailImg.src = "mailbox_close.jpeg.png";
+        mailOpened = false;
+        overlay.style.display = "none";
+        mailModal.style.display = "none";
+    }
+    closeModalBtn.addEventListener("click", closeMailBox);
+    overlay.addEventListener("click", closeMailBox);
+</script>
+</body>
+</html>
