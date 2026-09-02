@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Little House</title>
+    <title>Our Little House</title>
     <style>
         * {
             margin: 0;
@@ -12,151 +12,250 @@
         }
         body {
             overflow: hidden;
-            font-family: system-ui, sans-serif;
+            font-family: system-ui, -apple-system, sans-serif;
         }
-        .rotate-notice {
-            position: fixed;
-            inset: 0;
-            background-color: #222835;
-            color: white;
-            z-index: 9999;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 30px;
-            font-size: 22px;
-        }
-        /* 註釋咗強制要橫屏嘅規則，直放都可以睇 */
-        /*
-        @media (orientation:portrait) {
-            .rotate-notice {
-                display: flex;
-            }
-            .start-screen, .house-scene {
-                display: none !important;
-            }
-        }
-        */
-        .start-screen {
-            position: fixed;
-            inset: 0;
-            background-color: #222835;
-            color: white;
+
+        /* 第一頁：門口畫面 */
+        .entrance-scene {
+            width: 100vw;
+            height: 100vh;
+            background-color: #f8f2e4;
+            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            z-index: 998;
-            transition: opacity 1.2s ease;
+            transition: opacity 1s ease;
+            z-index: 10;
         }
-        .start-title {
-            font-size: 44px;
-            letter-spacing: 2px;
-            margin-bottom: 18px;
+        .entrance-title {
+            font-size: 32px;
+            color: #443b30;
+            margin-bottom: 6px;
         }
-        .start-subtitle {
-            font-size: 18px;
-            opacity: 0.7;
-            margin-bottom: 45px;
+        .entrance-sub {
+            font-size: 13px;
+            color: #8c7e6c;
+            margin-bottom: 40px;
         }
-        .enter-button {
-            padding: 15px 40px;
-            background-color: #c99c6d;
+
+        .door-frame {
+            position: relative;
+            width: 220px;
+            height: 280px;
+        }
+        .door-arch {
+            position: absolute;
+            width: 220px;
+            height: 280px;
+            background-color: #b88c64;
+            border-radius: 110px 110px 0 0;
+            overflow: hidden;
+        }
+        .door-inner-bg {
+            position: absolute;
+            width: 186px;
+            height: 246px;
+            background-color: #704c32;
+            top: 17px;
+            left: 17px;
+            border-radius: 93px 93px 0 0;
+        }
+        /* 可動嘅門板 — 開門動畫 */
+        .door-panel {
+            position: absolute;
+            width: 102px;
+            height: 246px;
+            background-color: #f2ddbc;
+            top: 17px;
+            left: 17px;
+            border-radius: 93px 0 0 0;
+            transform-origin: left center;
+            transition: transform 1.4s cubic‑bezier(0.22,1,0.36,1);
+            box-shadow: 2px 0 8px rgba(0,0,0,0.18);
+        }
+        .door-panel.open {
+            transform: rotateY(-78deg);
+        }
+        .door-nameplate {
+            position: absolute;
+            top: 100px;
+            left: 52px;
+            background-color: #e6c278;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #5a4828;
+        }
+        .door-knob {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: #d4a058;
+            border-radius: 50%;
+            right: 14px;
+            top: 132px;
+        }
+        .steps {
+            position: absolute;
+            bottom: -28px;
+            left: 34px;
+            width: 152px;
+            height: 28px;
+        }
+        .step {
+            height: 9px;
+            background-color: #e0ccb0;
+            margin: 2px 0;
+            border-radius: 3px;
+        }
+
+        /* 郵箱 */
+        .mailbox {
+            position: absolute;
+            left: -110px;
+            bottom: 0;
+        }
+        .mail‑post {
+            width: 16px;
+            height: 70px;
+            background-color: #d1b89a;
+            margin: 0 auto;
+            border-radius: 4px;
+        }
+        .mail‑box {
+            width: 46px;
+            height: 34px;
+            background-color: #507c7c;
+            border-radius: 14px 14px 4px 4px;
+            position: relative;
+            top: -8px;
+        }
+        .mail‑flag {
+            position: absolute;
+            width: 12px;
+            height: 8px;
+            background-color: #dd4444;
+            right: -4px;
+            top: 4px;
+            border-radius: 2px;
+        }
+
+        /* 盆栽 */
+        .plant‑pot {
+            position: absolute;
+            right: -86px;
+            bottom: 0;
+        }
+        .pot {
+            width: 42px;
+            height: 34px;
+            background-color: #d47c4c;
+            border-radius: 0 0 10px 10px;
+        }
+        .leaves {
+            width: 46px;
+            height: 36px;
+            background-color: #629962;
+            border-radius: 50%;
+            position: relative;
+            top: -22px;
+        }
+
+        .enter‑btn {
+            margin-top: 60px;
+            padding: 8px 22px;
+            background-color: #3a3229;
+            color: #fff;
             border: none;
-            border-radius: 999px;
-            font-size: 17px;
+            border-radius: 22px;
+            font-size: 14px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.25s;
         }
-        .enter-button:hover {
-            transform: scale(1.06);
-            background-color: #daad7e;
+        .enter‑btn:hover {
+            background-color: #574b3e;
         }
-        .house-scene {
+
+        /* 屋入面嘅場景（一開始隱藏） */
+        .house‑scene {
             width: 100vw;
             height: 100vh;
-            position: relative;
+            position: absolute;
+            inset: 0;
             display: none;
         }
         .snowflake {
             position: absolute;
-            background: white;
+            background: #ffffff;
             border-radius: 50%;
-            opacity: 0.8;
-            pointer-events: none;
+            opacity: 0.82;
+            pointer‑events: none;
         }
-        .house-background {
+        .house‑background {
             width: 100%;
             height: 100%;
-            background: url("./mon_gate_western_open_half.png") center / cover no-repeat;
+            background: url("./mon_gate_western_open_half.png") center top / contain no‑repeat;
+            background‑color: #222835;
             position: absolute;
             inset: 0;
         }
-        .clickable-item {
+        .clickable‑item {
             position: absolute;
             cursor: pointer;
             transition: all 0.4s ease;
         }
-        .clickable-item:hover {
+        .clickable‑item:hover {
             filter: brightness(1.2);
             transform: scale(1.08);
         }
-        .door {
-            width: 120px;
-            height: 180px;
-            bottom: 180px;
-            left: 140px;
-            /* 如果你之後有門嘅圖，就喺呢度換檔名 */
-        }
-        .vinyl-record {
+        .vinyl‑record {
             width: 90px;
             height: 90px;
             bottom: 220px;
             right: 180px;
-            background: url("./music_record_disc.png") center / contain no-repeat;
+            background: url("./music_record_disc.png") center / contain no‑repeat;
         }
-        .vinyl-record.spin {
+        .vinyl‑record.spin {
             animation: rotateDisk 8s linear infinite;
         }
         @keyframes rotateDisk {
-            from {transform: rotate(0deg);}
-            to {transform: rotate(360deg);}
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
         .envelope {
             width: 80px;
             height: 60px;
             bottom: 240px;
             left: 220px;
-            background: url("./christmas_card04.jpg") center / contain no-repeat;
+            background: url("./christmas_card04.jpg") center / contain no‑repeat;
         }
-        .letter-overlay {
+        .letter‑overlay {
             position: fixed;
             inset: 0;
             background: rgba(0,0,0,0.75);
-            z-index: 100;
+            z‑index: 100;
             display: none;
-            align-items: center;
-            justify-content: center;
+            align‑items: center;
+            justify‑content: center;
         }
-        .letter-box {
-            width: min(560px, 90vw);
-            background-color: #f8f3e8;
-            color: #222222;
+        .letter‑box {
+            width: min(560px,90vw);
+            background‑color: #f8f3e8;
+            color: #222;
             padding: 40px 36px;
-            border-radius: 10px;
+            border‑radius: 10px;
             position: relative;
-            line-height: 1.8;
-            font-size: 17px;
+            line‑height: 1.8;
+            font‑size: 17px;
         }
-        .close-letter {
+        .close‑letter {
             position: absolute;
             top: 14px;
             right: 18px;
-            font-size: 24px;
+            font‑size: 24px;
             cursor: pointer;
-            color: #666666;
+            color: #666;
         }
         audio {
             display: none;
@@ -164,87 +263,126 @@
     </style>
 </head>
 <body>
-    <div class="rotate-notice">
-        <div style="font-size:48px;margin-bottom:20px;">📱</div>
-        Please rotate your device to landscape mode to view this page.
-    </div>
-    <div class="start-screen" id="startScreen">
-        <div class="start-title">Our Little House</div>
-        <div class="start-subtitle">Memories that belong to us</div>
-        <button class="enter-button" onclick="goInside()">Enter House</button>
-    </div>
-    <div class="house-scene" id="houseScene">
-        <div class="house-background"></div>
-        <div class="clickable-item door"></div>
-        <div class="clickable-item vinyl-record" id="recordEl"></div>
-        <div class="clickable-item envelope" id="envelopeEl"></div>
-    </div>
-    <div class="letter-overlay" id="letterOverlay">
-        <div class="letter-box">
-            <span class="close-letter" onclick="shutLetter()">×</span>
-            Dear you,<br><br>
-            Write your words here.
+
+<div class="entrance-scene" id="entranceScene">
+    <div class="entrance-title">Knock, knock. ✊</div>
+    <div class="entrance-sub">Tea is almost ready.</div>
+
+    <div class="door-frame">
+        <div class="door-arch">
+            <div class="door-inner-bg"></div>
+            <div class="door-panel" id="doorPanel">
+                <div class="door-nameplate">Avery</div>
+                <div class="door-knob"></div>
+            </div>
+        </div>
+        <div class="steps">
+            <div class="step"></div>
+            <div class="step"></div>
+            <div class="step"></div>
+        </div>
+        <div class="mailbox">
+            <div class="mail‑box">
+                <div class="mail‑flag"></div>
+            </div>
+            <div class="mail‑post"></div>
+        </div>
+        <div class="plant‑pot">
+            <div class="leaves"></div>
+            <div class="pot"></div>
         </div>
     </div>
-    <audio id="bgAudio" src="./leberch-christmas-440431.mp3" loop>
-    <script>
-        const startScreen = document.getElementById("startScreen");
-        const houseScene = document.getElementById("houseScene");
-        const recordEl = document.getElementById("recordEl");
-        const envelopeEl = document.getElementById("envelopeEl");
-        const letterOverlay = document.getElementById("letterOverlay");
-        const bgAudio = document.getElementById("bgAudio");
-        let musicOn = false;
-        function goInside(){
-            startScreen.style.opacity = "0";
+
+    <button class="enter‑btn" id="comeInBtn">Come in →</button>
+</div>
+
+<div class="house‑scene" id="houseScene">
+    <div class="house‑background"></div>
+    <div class="clickable‑item vinyl‑record" id="recordEl"></div>
+    <div class="clickable‑item envelope" id="envelopeEl"></div>
+</div>
+
+<div class="letter‑overlay" id="letterOverlay">
+    <div class="letter‑box">
+        <span class="close‑letter" onclick="shutLetter()">×</span>
+        Dear you,<br><br>
+        Write your words here.
+    </div>
+</div>
+
+<audio id="bgAudio" src="./leberch‑christmas‑440431.mp3" loop>
+
+<script>
+    const entranceScene = document.getElementById("entranceScene");
+    const houseScene = document.getElementById("houseScene");
+    const doorPanel = document.getElementById("doorPanel");
+    const comeInBtn = document.getElementById("comeInBtn");
+    const recordEl = document.getElementById("recordEl");
+    const envelopeEl = document.getElementById("envelopeEl");
+    const letterOverlay = document.getElementById("letterOverlay");
+    const bgAudio = document.getElementById("bgAudio");
+    let musicOn = false;
+
+    comeInBtn.addEventListener("click", ()=>{
+        // 門打開動畫
+        doorPanel.classList.add("open");
+        setTimeout(()=>{
+            entranceScene.style.opacity = "0";
             setTimeout(()=>{
-                startScreen.style.display = "none";
+                entranceScene.style.display = "none";
                 houseScene.style.display = "block";
                 makeSnow();
-            },1200);
+            }, 1000);
+        }, 1400);
+    });
+
+    // 落雪效果
+    function makeSnow(){
+        for(let i=0;i<60;i++){
+            const flake = document.createElement("div");
+            flake.classList.add("snowflake");
+            const size = Math.random()*6+2;
+            flake.style.width = size+"px";
+            flake.style.height = size+"px";
+            flake.style.left = Math.random()*100+"vw";
+            flake.style.top = "-10vh";
+            houseScene.appendChild(flake);
+            fallSnow(flake);
         }
-        function makeSnow(){
-            for(let i=0;i<60;i++){
-                const flake = document.createElement("div");
-                flake.classList.add("snowflake");
-                const size = Math.random()*6+2;
-                flake.style.width = size+"px";
-                flake.style.height = size+"px";
-                flake.style.left = Math.random()*100+"vw";
-                flake.style.top = -10+"vh";
-                houseScene.appendChild(flake);
-                fallSnow(flake);
-            }
+    }
+    function fallSnow(flake){
+        const fallTime = Math.random()*12+8;
+        flake.style.transition = `top ${fallTime}s linear`;
+        flake.style.top = "100vh";
+        setTimeout(()=>{
+            flake.style.top = "-10vh";
+            fallSnow(flake);
+        }, fallTime*1000);
+    }
+
+    // 唱片播放音樂
+    recordEl.addEventListener("click",()=>{
+        if(!musicOn){
+            bgAudio.play();
+            recordEl.classList.add("spin");
+            musicOn = true;
+        }else{
+            bgAudio.pause();
+            recordEl.classList.remove("spin");
+            musicOn = false;
         }
-        function fallSnow(flake){
-            const fallTime = Math.random()*12+8;
-            flake.style.transition = `top ${fallTime}s linear`;
-            flake.style.top = "100vh";
-            setTimeout(()=>{
-                flake.style.top = "-10vh";
-                fallSnow(flake);
-            },fallTime*1000);
-        }
-        recordEl.addEventListener("click",()=>{
-            if(!musicOn){
-                bgAudio.play();
-                recordEl.classList.add("spin");
-                musicOn = true;
-            }else{
-                bgAudio.pause();
-                recordEl.classList.remove("spin");
-                musicOn = false;
-            }
-        })
-        envelopeEl.addEventListener("click",()=>{
-            letterOverlay.style.display = "flex";
-        })
-        function shutLetter(){
-            letterOverlay.style.display = "none";
-        }
-        letterOverlay.addEventListener("click",(ev)=>{
-            if(ev.target === letterOverlay) shutLetter();
-        })
-    </script>
+    })
+
+    // 打開信封
+    envelopeEl.addEventListener("click",()=>{
+        letterOverlay.style.display = "flex";
+    })
+    function shutLetter(){
+        letterOverlay.style.display = "none";
+    }
+    letterOverlay.addEventListener("click",(ev)=>{
+        if(ev.target === letterOverlay) shutLetter();
+    })
+</script>
 </body>
 </html>
