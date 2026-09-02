@@ -27,8 +27,9 @@
             text-align: center;
             padding: 30px;
             font-size: 22px;
-      /*
         }
+        /* 註釋咗強制要橫屏嘅規則，直放都可以睇 */
+        /*
         @media (orientation:portrait) {
             .rotate-notice {
                 display: flex;
@@ -89,7 +90,7 @@
         .house-background {
             width: 100%;
             height: 100%;
-            background: url("./house-bg.png") center / cover no-repeat;
+            background: url("./mon_gate_western_open_half.png") center / cover no-repeat;
             position: absolute;
             inset: 0;
         }
@@ -107,14 +108,14 @@
             height: 180px;
             bottom: 180px;
             left: 140px;
-            background: url("./door.png") center / contain no-repeat;
+            /* 如果你之後有門嘅圖，就喺呢度換檔名 */
         }
         .vinyl-record {
             width: 90px;
             height: 90px;
             bottom: 220px;
             right: 180px;
-            background: url("./record.png") center / contain no-repeat;
+            background: url("./music_record_disc.png") center / contain no-repeat;
         }
         .vinyl-record.spin {
             animation: rotateDisk 8s linear infinite;
@@ -128,7 +129,7 @@
             height: 60px;
             bottom: 240px;
             left: 220px;
-            background: url("./envelope.png") center / contain no-repeat;
+            background: url("./christmas_card04.jpg") center / contain no-repeat;
         }
         .letter-overlay {
             position: fixed;
@@ -167,20 +168,17 @@
         <div style="font-size:48px;margin-bottom:20px;">📱</div>
         Please rotate your device to landscape mode to view this page.
     </div>
-
     <div class="start-screen" id="startScreen">
         <div class="start-title">Our Little House</div>
         <div class="start-subtitle">Memories that belong to us</div>
         <button class="enter-button" onclick="goInside()">Enter House</button>
     </div>
-
     <div class="house-scene" id="houseScene">
         <div class="house-background"></div>
         <div class="clickable-item door"></div>
         <div class="clickable-item vinyl-record" id="recordEl"></div>
         <div class="clickable-item envelope" id="envelopeEl"></div>
     </div>
-
     <div class="letter-overlay" id="letterOverlay">
         <div class="letter-box">
             <span class="close-letter" onclick="shutLetter()">×</span>
@@ -188,9 +186,7 @@
             Write your words here.
         </div>
     </div>
-
-    <audio id="bgAudio" src="./first-love.mp3" loop>
-
+    <audio id="bgAudio" src="./leberch-christmas-440431.mp3" loop>
     <script>
         const startScreen = document.getElementById("startScreen");
         const houseScene = document.getElementById("houseScene");
@@ -199,7 +195,6 @@
         const letterOverlay = document.getElementById("letterOverlay");
         const bgAudio = document.getElementById("bgAudio");
         let musicOn = false;
-
         function goInside(){
             startScreen.style.opacity = "0";
             setTimeout(()=>{
@@ -208,7 +203,6 @@
                 makeSnow();
             },1200);
         }
-
         function makeSnow(){
             for(let i=0;i<60;i++){
                 const flake = document.createElement("div");
@@ -222,7 +216,6 @@
                 fallSnow(flake);
             }
         }
-
         function fallSnow(flake){
             const fallTime = Math.random()*12+8;
             flake.style.transition = `top ${fallTime}s linear`;
@@ -232,7 +225,6 @@
                 fallSnow(flake);
             },fallTime*1000);
         }
-
         recordEl.addEventListener("click",()=>{
             if(!musicOn){
                 bgAudio.play();
@@ -244,7 +236,6 @@
                 musicOn = false;
             }
         })
-
         envelopeEl.addEventListener("click",()=>{
             letterOverlay.style.display = "flex";
         })
