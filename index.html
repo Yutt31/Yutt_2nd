@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Little House</title>
+    <title>YUTT 小家</title>
     <style>
         * {
             margin: 0;
@@ -13,376 +13,185 @@
         body {
             overflow: hidden;
             font-family: system-ui, -apple-system, sans-serif;
+            background-color: #f8f2e4;
         }
-
-        /* 第一頁：門口畫面 */
-        .entrance-scene {
+        .container {
             width: 100vw;
             height: 100vh;
-            background-color: #f8f2e4;
             position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 1s ease;
-            z-index: 10;
+            perspective: 1200px;
         }
-        .entrance-title {
-            font-size: 32px;
-            color: #443b30;
-            margin-bottom: 6px;
-        }
-        .entrance-sub {
-            font-size: 13px;
-            color: #8c7e6c;
-            margin-bottom: 40px;
-        }
-
-        .door-frame {
-            position: relative;
-            width: 220px;
-            height: 280px;
-        }
-        .door-arch {
+        /* 屋入面背景 */
+        .inside-room {
+            width: 100%;
+            height: 100%;
+            background: url("mon_gate_western_open_half.png") no-repeat center;
+            background-size: contain;
             position: absolute;
-            width: 220px;
-            height: 280px;
-            background-color: #b88c64;
-            border-radius: 110px 110px 0 0;
-            overflow: hidden;
+            top: 0;
+            left: 0;
+            z-index: 1;
         }
-        .door-inner-bg {
+        /* 門外框 */
+        .door-wrap {
             position: absolute;
-            width: 186px;
-            height: 246px;
-            background-color: #704c32;
-            top: 17px;
-            left: 17px;
-            border-radius: 93px 93px 0 0;
+            width: 420px;
+            height: 480px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            perspective: 1000px;
         }
-        /* 可動嘅門板 — 開門動畫 */
-        .door-panel {
-            position: absolute;
-            width: 102px;
-            height: 246px;
-            background-color: #f2ddbc;
-            top: 17px;
-            left: 17px;
-            border-radius: 93px 0 0 0;
+        .door {
+            width: 100%;
+            height: 100%;
+            background-image: url("mon_gate_western_close.png");
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
             transform-origin: left center;
-            transition: transform 1.4s cubic‑bezier(0.22,1,0.36,1);
-            box-shadow: 2px 0 8px rgba(0,0,0,0.18);
+            transition: transform 1.6s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: pointer;
         }
-        .door-panel.open {
-            transform: rotateY(-78deg);
+        .door.open {
+            transform: rotateY(-82deg);
         }
-        .door-nameplate {
+        /* YUTT 門牌 */
+        .name-plate {
             position: absolute;
-            top: 100px;
-            left: 52px;
+            top: 72%;
+            left: 52%;
+            transform: translate(-50%, 0);
             background-color: #e6c278;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            color: #5a4828;
-        }
-        .door-knob {
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background-color: #d4a058;
-            border-radius: 50%;
-            right: 14px;
-            top: 132px;
-        }
-        .steps {
-            position: absolute;
-            bottom: -28px;
-            left: 34px;
-            width: 152px;
-            height: 28px;
-        }
-        .step {
-            height: 9px;
-            background-color: #e0ccb0;
-            margin: 2px 0;
-            border-radius: 3px;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #4a3818;
+            z-index: 3;
+            pointer-events: none;
         }
 
-        /* 郵箱 */
+        /* 可點擊嘅郵箱 */
         .mailbox {
             position: absolute;
-            left: -110px;
-            bottom: 0;
+            bottom: 14vh;
+            left: calc(50% - 260px);
+            z-index: 3;
+            cursor: pointer;
         }
-        .mail‑post {
-            width: 16px;
-            height: 70px;
-            background-color: #d1b89a;
-            margin: 0 auto;
-            border-radius: 4px;
-        }
-        .mail‑box {
-            width: 46px;
-            height: 34px;
-            background-color: #507c7c;
-            border-radius: 14px 14px 4px 4px;
-            position: relative;
-            top: -8px;
-        }
-        .mail‑flag {
-            position: absolute;
+        .mail-post {
             width: 12px;
-            height: 8px;
-            background-color: #dd4444;
-            right: -4px;
-            top: 4px;
+            height: 70px;
+            background: #795548;
+            margin: 0 auto;
+            border-radius: 3px;
+        }
+        .mail-box-body {
+            width: 54px;
+            height: 32px;
+            background-color: #c0392b;
+            border-radius: 6px 6px 2px 2px;
+            position: relative;
+        }
+        .mail-lid {
+            width: 54px;
+            height: 14px;
+            background-color: #a93226;
+            border-radius: 6px 6px 0 0;
+            position: absolute;
+            top: -12px;
+            left: 0;
+            transform-origin: left top;
+            transition: transform 0.6s ease;
+        }
+        .mail-lid.open-lid {
+            transform: rotateZ(-70deg);
+        }
+        .mail-slot {
+            width: 36px;
+            height: 4px;
+            background: #222;
+            position: absolute;
+            top: 10px;
+            left: 9px;
             border-radius: 2px;
         }
 
-        /* 盆栽 */
-        .plant‑pot {
+        /* 正常卡通樹（三層樹冠，唔係單一圓圈） */
+        .tree {
             position: absolute;
-            right: -86px;
-            bottom: 0;
+            bottom: 12vh;
+            right: calc(50% - 280px);
+            z-index: 3;
+            pointer-events: none;
         }
-        .pot {
-            width: 42px;
-            height: 34px;
-            background-color: #d47c4c;
-            border-radius: 0 0 10px 10px;
+        .tree-trunk {
+            width: 22px;
+            height: 85px;
+            background-color: #8b5a2b;
+            margin: 0 auto;
+            border-radius: 4px;
         }
-        .leaves {
-            width: 46px;
-            height: 36px;
-            background-color: #629962;
+        .leaf-1 {
+            width: 86px;
+            height: 86px;
+            background-color: #67b944;
             border-radius: 50%;
-            position: relative;
-            top: -22px;
+            margin: 0 auto -32px auto;
+        }
+        .leaf-2 {
+            width: 72px;
+            height: 72px;
+            background-color: #73c74e;
+            border-radius: 50%;
+            margin: 0 auto -26px auto;
+        }
+        .leaf-3 {
+            width: 58px;
+            height: 58px;
+            background-color: #82d25c;
+            border-radius: 50%;
+            margin: 0 auto -18px auto;
         }
 
-        .enter‑btn {
-            margin-top: 60px;
-            padding: 8px 22px;
-            background-color: #3a3229;
-            color: #fff;
-            border: none;
-            border-radius: 22px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: 0.25s;
-        }
-        .enter‑btn:hover {
-            background-color: #574b3e;
-        }
-
-        /* 屋入面嘅場景（一開始隱藏） */
-        .house‑scene {
-            width: 100vw;
-            height: 100vh;
-            position: absolute;
-            inset: 0;
-            display: none;
-        }
-        .snowflake {
-            position: absolute;
-            background: #ffffff;
-            border-radius: 50%;
-            opacity: 0.82;
-            pointer‑events: none;
-        }
-        .house‑background {
-            width: 100%;
-            height: 100%;
-            background: url("./mon_gate_western_open_half.png") center top / contain no‑repeat;
-            background‑color: #222835;
-            position: absolute;
-            inset: 0;
-        }
-        .clickable‑item {
-            position: absolute;
-            cursor: pointer;
-            transition: all 0.4s ease;
-        }
-        .clickable‑item:hover {
-            filter: brightness(1.2);
-            transform: scale(1.08);
-        }
-        .vinyl‑record {
-            width: 90px;
-            height: 90px;
-            bottom: 220px;
-            right: 180px;
-            background: url("./music_record_disc.png") center / contain no‑repeat;
-        }
-        .vinyl‑record.spin {
-            animation: rotateDisk 8s linear infinite;
-        }
-        @keyframes rotateDisk {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        .envelope {
-            width: 80px;
-            height: 60px;
-            bottom: 240px;
-            left: 220px;
-            background: url("./christmas_card04.jpg") center / contain no‑repeat;
-        }
-        .letter‑overlay {
+        /* 郵箱彈窗 */
+        .mail-modal {
             position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.75);
-            z‑index: 100;
+            width: 320px;
+            padding: 24px;
+            background: #fffef0;
+            border: 4px solid #b88c58;
+            border-radius: 12px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            z-index: 100;
             display: none;
-            align‑items: center;
-            justify‑content: center;
         }
-        .letter‑box {
-            width: min(560px,90vw);
-            background‑color: #f8f3e8;
-            color: #222;
-            padding: 40px 36px;
-            border‑radius: 10px;
-            position: relative;
-            line‑height: 1.8;
-            font‑size: 17px;
+        .mail-modal h4 {
+            margin-bottom:12px;
+            color:#5a4220;
         }
-        .close‑letter {
-            position: absolute;
-            top: 14px;
-            right: 18px;
-            font‑size: 24px;
-            cursor: pointer;
-            color: #666;
+        .mail-modal p {
+            color:#666;
+            margin-bottom:16px;
         }
-        audio {
-            display: none;
+        .close-mail {
+            padding: 6px 12px;
+            background:#d4b47c;
+            border:none;
+            border-radius:4px;
+            cursor:pointer;
+        }
+        .overlay {
+            position:fixed;
+            width:100vw;
+            height:100vh;
+            background:rgba(0,0,0,0.4);
+            z-index:99;
+            display:none;
         }
     </style>
 </head>
-<body>
-
-<div class="entrance-scene" id="entranceScene">
-    <div class="entrance-title">Knock, knock. ✊</div>
-    <div class="entrance-sub">Tea is almost ready.</div>
-
-    <div class="door-frame">
-        <div class="door-arch">
-            <div class="door-inner-bg"></div>
-            <div class="door-panel" id="doorPanel">
-                <div class="door-nameplate">Avery</div>
-                <div class="door-knob"></div>
-            </div>
-        </div>
-        <div class="steps">
-            <div class="step"></div>
-            <div class="step"></div>
-            <div class="step"></div>
-        </div>
-        <div class="mailbox">
-            <div class="mail‑box">
-                <div class="mail‑flag"></div>
-            </div>
-            <div class="mail‑post"></div>
-        </div>
-        <div class="plant‑pot">
-            <div class="leaves"></div>
-            <div class="pot"></div>
-        </div>
-    </div>
-
-    <button class="enter‑btn" id="comeInBtn">Come in →</button>
-</div>
-
-<div class="house‑scene" id="houseScene">
-    <div class="house‑background"></div>
-    <div class="clickable‑item vinyl‑record" id="recordEl"></div>
-    <div class="clickable‑item envelope" id="envelopeEl"></div>
-</div>
-
-<div class="letter‑overlay" id="letterOverlay">
-    <div class="letter‑box">
-        <span class="close‑letter" onclick="shutLetter()">×</span>
-        Dear you,<br><br>
-        Write your words here.
-    </div>
-</div>
-
-<audio id="bgAudio" src="./leberch‑christmas‑440431.mp3" loop>
-
-<script>
-    const entranceScene = document.getElementById("entranceScene");
-    const houseScene = document.getElementById("houseScene");
-    const doorPanel = document.getElementById("doorPanel");
-    const comeInBtn = document.getElementById("comeInBtn");
-    const recordEl = document.getElementById("recordEl");
-    const envelopeEl = document.getElementById("envelopeEl");
-    const letterOverlay = document.getElementById("letterOverlay");
-    const bgAudio = document.getElementById("bgAudio");
-    let musicOn = false;
-
-    comeInBtn.addEventListener("click", ()=>{
-        // 門打開動畫
-        doorPanel.classList.add("open");
-        setTimeout(()=>{
-            entranceScene.style.opacity = "0";
-            setTimeout(()=>{
-                entranceScene.style.display = "none";
-                houseScene.style.display = "block";
-                makeSnow();
-            }, 1000);
-        }, 1400);
-    });
-
-    // 落雪效果
-    function makeSnow(){
-        for(let i=0;i<60;i++){
-            const flake = document.createElement("div");
-            flake.classList.add("snowflake");
-            const size = Math.random()*6+2;
-            flake.style.width = size+"px";
-            flake.style.height = size+"px";
-            flake.style.left = Math.random()*100+"vw";
-            flake.style.top = "-10vh";
-            houseScene.appendChild(flake);
-            fallSnow(flake);
-        }
-    }
-    function fallSnow(flake){
-        const fallTime = Math.random()*12+8;
-        flake.style.transition = `top ${fallTime}s linear`;
-        flake.style.top = "100vh";
-        setTimeout(()=>{
-            flake.style.top = "-10vh";
-            fallSnow(flake);
-        }, fallTime*1000);
-    }
-
-    // 唱片播放音樂
-    recordEl.addEventListener("click",()=>{
-        if(!musicOn){
-            bgAudio.play();
-            recordEl.classList.add("spin");
-            musicOn = true;
-        }else{
-            bgAudio.pause();
-            recordEl.classList.remove("spin");
-            musicOn = false;
-        }
-    })
-
-    // 打開信封
-    envelopeEl.addEventListener("click",()=>{
-        letterOverlay.style.display = "flex";
-    })
-    function shutLetter(){
-        letterOverlay.style.display = "none";
-    }
-    letterOverlay.addEventListener("click",(ev)=>{
-        if(ev.target === letterOverlay) shutLetter();
-    })
-</script>
-</body>
-</html>
